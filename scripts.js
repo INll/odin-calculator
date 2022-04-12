@@ -91,9 +91,6 @@ function updateDisplay(e) {
         calc.splice(2, 1, clicked);
         console.log(calc);
       } else if (calc[1] !== 0) {
-        // If user didn't input anything, calc[1] === 0. This allows user to
-        // spam/change operator when there's no second number input yet
-
         // Reset to display new result
         resetDisp = true;
         // Compute pending
@@ -107,6 +104,8 @@ function updateDisplay(e) {
         console.log('3');
         return;
       } else {
+        // When user hasn't input the 2nd number
+        // Allow users to change/spam operator buttons
         calc.splice(2, 1, clicked);
         resetDisp = true;
         console.log(calc);
@@ -165,3 +164,14 @@ function updateDisplay(e) {
     console.log(calc);
   }
 }
+
+//      TO-DO
+
+// REFACTOR
+// DECIMAL POINT BUTTON
+// LIMIT DECIMAL POINT TO ONE ONLY (DISABLE BUTTON ONCE THERE'S ONE)
+// TRIM LONG DECIMALS
+// ZERO DIVISION WARNING
+// CSS BEAUTIFICATION
+// BACKSPACE
+// KEYBOARD SUPPORT?
