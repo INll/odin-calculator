@@ -18,7 +18,7 @@ function add (a, b) {
 
 // Subtract two inputs
 function subtract (a, b) {
-  return Math.max(a, b) - Math.min(a, b);
+  return a - b;
 }
 
 // Multiple two inputs
@@ -28,6 +28,7 @@ function multiply (a, b) {
 
 // Divide two inputs
 function divide (a, b) {
+  if (b === 0) return 'Cannot divide by Zero!';
   return a / b;
 }
 
@@ -68,21 +69,30 @@ const allBtns = document.querySelectorAll('.btn');
 const display = document.querySelector('.display');
 
 allBtns.forEach((btn) => {
-  btn.addEventListener('click', updateDisplay)});
+  btn.addEventListener('click', handler)});
 
 // Populate display after activation of numeric and operator buttons
-function updateDisplay(e) {
+function handler(e) {
   const clicked = this.classList[1];
+  let newDisplayText = display.innerHTML + clicked;
   // Evaluate buttons
   switch (clicked) {
     case '+': case '-': case '*': case '/':
-      // If there is no pending computation (this is the 1st operator)
+      // Check if no operator has been selected before
       if (calc[2] === 0) {
         calc.splice(2, 1, clicked);
-        // console.log(calc);
+      }
+      console.log(newDisplayText[newDisplayText.length]);
+      console.log(newDisplayText[newDisplayText.length - 1]);
+      console.log(newDisplayText[newDisplayText.length - 2]);
+      console.log(newDisplayText[newDisplayText.length - 3]);
+      // If number ends with a decimal point, remove that decimal point
+      if (newDisplayText[newDisplayText.length - 2] === '.') {
+        display.innerHTML = newDisplayText.substring(0, newDisplayText.length - 2);
       }
       if (isNum1) {
         // Do not revoke isNum1 status if operator is the 1st input
+        // User can choose an operator even if no number is typed
         if (calc[0] !== 0) {
           isNum1 = false;
         }
@@ -110,20 +120,30 @@ function updateDisplay(e) {
         resetDisp = true;
         console.log(calc);
       };
+      console.log(newDisplayText);
       break;
     case 'ac':
       if (calc[0] === 0 && 
-        calc[1] === 0 && 
-        calc[2] === 0) return;
+          calc[1] === 0 && 
+          calc[2] === 0) return;
       allClear();
       console.log(calc);
       return;
+    case 'bksp':
+      display.innerHTML = display.innerHTML.slice(0, -1);
     case '=':
       // Check for empty calc array
       if (calc[0] === 0 || 
           calc[1] === 0 || 
-          calc[2] === 0) return;
+          calc[2] === 0) {
+            // If number ends with a decimal point, remove that decimal point
+            if (newDisplayText[newDisplayText.length - 2] === '.') {
+              display.innerHTML = newDisplayText.substring(0, newDisplayText.length - 2);
+            }
+            return;
+          }
       result = operate(calc[0], calc[1], calc[2]);
+
       console.log(`Result is ${result}.`);
       // Store result in calc[0]
       calc.splice(0, 3, result, 0, 0);
@@ -131,19 +151,33 @@ function updateDisplay(e) {
       resetDisp = true;
       console.log(calc);
       break;
-    default:  // Update display upon clicks
-      let newDisplayText = display.innerHTML + clicked;
-      if (newDisplayText[0] === '0') { // Remove leading '0'
+    case '.':
+      // Return if there is already a decimal point
+      if (display.innerHTML.split("").find(e => e === '.') === '.') return;
+      if (isNum1) {
+        // Display accumulated string of numbers
+        display.innerHTML = newDisplayText;
+        calc.splice(0, 1, newDisplayText);
+      } else { // Ready for new number input
+        display.innerHTML = newDisplayText;
+        calc.splice(1, 1, newDisplayText);
+      }
+      break;
+    default:  // Update display upon click on any of the numbers
+      // Remove leading '0', unless it is '0.'
+      if (newDisplayText[0] === '0' && 
+          newDisplayText[1] !== '.') { 
         newDisplayText = newDisplayText.substring(1);
       }
       // Reset display for displaying next input
       if (resetDisp) {
         resetDisplay(clicked);
+        // User tries to input the first number
         if (isNum1) {
           calc.splice(0, 1, clicked);
         } else if (calc[1] === 0 && calc[2] === 0) {
-          // This happens When '=' was called.
-          // In this case the numeric inputs are num1.
+          // This happens when '=' was used to calculate a result last time.
+          // So the new number is num1.
           isNum1 = true;
           calc.splice(0, 1, clicked);
         } else {
@@ -154,7 +188,7 @@ function updateDisplay(e) {
         return;
       }
       if (isNum1) {
-        // Store display num1 into calc
+        // Display accumulated string of numbers
         display.innerHTML = newDisplayText;
         calc.splice(0, 1, newDisplayText);
       } else { // Ready for new number input
@@ -165,13 +199,15 @@ function updateDisplay(e) {
   }
 }
 
+
+
 //      TO-DO
 
-// REFACTOR
-// DECIMAL POINT BUTTON
-// LIMIT DECIMAL POINT TO ONE ONLY (DISABLE BUTTON ONCE THERE'S ONE)
-// TRIM LONG DECIMALS
-// ZERO DIVISION WARNING
-// CSS BEAUTIFICATION
-// BACKSPACE
-// KEYBOARD SUPPORT?
+// REFACTOR  ** I'd rather proceed in TOP **
+// DECIMAL POINT BUTTON   ** DONE **
+// LIMIT DECIMAL POINT TO ONE ONLY (DISABLE BUTTON ONCE THERE'S ONE)  ** DONE **
+// TRIM LONG DECIMALS  ** Users would prefer higher precision **
+// ZERO DIVISION WARNING  ** DONE **
+// CSS BEAUTIFICATION  
+// BACKSPACE   ** DONE **
+// KEYBOARD SUPPORT?   ** I don't have a numpad **
