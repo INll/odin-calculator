@@ -1,0 +1,90 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 15% 20px 20px 20px;
+  gap: 5px;
+}
+
+.dispVal {
+  display: flex;
+  justify-content: left;
+  width: 103.34px;
+}
+
+.display {
+  display: flex;
+  padding: 0px 0px 5px 10px;
+}
+
+.numeric-buttons {
+  width: 78.25px;
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.main-input {
+  display: flex;
+  flex-direction: row;
+}
+
+.four-operators {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0px 0px 0px 4px;
+}
+
+.four-operators-active {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid white;
+  gap: 4px;
+  margin: 0px 0px 0px 4px;
+}
+
+.meta-buttons {
+  display: flex;
+  width: 104.04px;
+  flex: 1 0 auto;
+  gap: 4px;
+}
+
+.btn.numeric {
+  width: 23.42px;
+  display: flex;
+  flex: 0 0 auto;
+  padding: .1em 0px 0px 0px;
+  justify-content: center;
+}
+
+.btn.meta {
+  display: flex;
+  justify-content: center;
+  flex: 1 0 auto;
+}
+
+.btn.operator {
+  display: flex;
+  height: 18.57px;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: .05em 6px 0px 6px;
+}
+
+.misc {
+  font-size: 11px;
+  font-weight: 500;
+  padding: 1.5px 0px;
+}
+
+button {
+  border: 1px solid black;
+}
+
+.btn:active span{
+  transform: translateY(.04em);
+}

@@ -43,13 +43,18 @@ function operate(num1, num2, operator) {
     case '*': result = multiply(num1, num2); break;
     case '/': result = divide(num1, num2); break;
   }
+  // Trim result if it gets too long
+  result = result.toString();
+  if (result.length > 11) {
+    return parseFloat(result.substring(0, 10));
+  }
   return result;
 }
 
 // Reset calc array and set display panel to 0
 function allClear() {
   calc = calc.map(num => 0);
-  display.innerHTML = 0;
+  dispVal.innerHTML = 0;
   isNum1 = true;
 }
 
@@ -59,36 +64,34 @@ function allClear() {
 // Input argument: Number user clicked immediately after +, -, *, /, and =
 function resetDisplay(clicked) {
   // console.log('Display has been reset');
-  display.innerHTML = clicked;
+  dispVal.innerHTML = clicked;
   resetDisp = false; // Reset not needed when entering the second number
 }
 
 
 // addEventListener() to all buttons
 const allBtns = document.querySelectorAll('.btn');
-const display = document.querySelector('.display');
+const dispVal = document.querySelector('.dispVal');
 
 allBtns.forEach((btn) => {
   btn.addEventListener('click', handler)});
 
 // Populate display after activation of numeric and operator buttons
 function handler(e) {
-  const clicked = this.classList[1];
-  let newDisplayText = display.innerHTML + clicked;
+  const clicked = this.classList[2];
+  let newDisplayText = dispVal.innerHTML + clicked;
   // Evaluate buttons
   switch (clicked) {
     case '+': case '-': case '*': case '/':
+      // Make button active
+      
       // Check if no operator has been selected before
       if (calc[2] === 0) {
         calc.splice(2, 1, clicked);
       }
-      console.log(newDisplayText[newDisplayText.length]);
-      console.log(newDisplayText[newDisplayText.length - 1]);
-      console.log(newDisplayText[newDisplayText.length - 2]);
-      console.log(newDisplayText[newDisplayText.length - 3]);
       // If number ends with a decimal point, remove that decimal point
       if (newDisplayText[newDisplayText.length - 2] === '.') {
-        display.innerHTML = newDisplayText.substring(0, newDisplayText.length - 2);
+        dispVal.innerHTML = newDisplayText.substring(0, newDisplayText.length - 2);
       }
       if (isNum1) {
         // Do not revoke isNum1 status if operator is the 1st input
@@ -107,7 +110,7 @@ function handler(e) {
         result = operate(calc[0], calc[1], calc[2]);
         // Store result in calc[0], set calc[1] to 0
         calc.splice(0, 2, result, 0);
-        display.innerHTML = result;
+        dispVal.innerHTML = result;
         // calc[2] set to current operator, to be evaluated on next input
         calc.splice(2, 1, clicked);
         console.log(calc);
@@ -130,7 +133,12 @@ function handler(e) {
       console.log(calc);
       return;
     case 'bksp':
-      display.innerHTML = display.innerHTML.slice(0, -1);
+      let bksped = dispVal.innerHTML.slice(0, -1)
+      if (bksped === '') {
+        dispVal.innerHTML = 0;
+      } else {
+        dispVal.innerHTML = bksped;
+      }
     case '=':
       // Check for empty calc array
       if (calc[0] === 0 || 
@@ -138,28 +146,29 @@ function handler(e) {
           calc[2] === 0) {
             // If number ends with a decimal point, remove that decimal point
             if (newDisplayText[newDisplayText.length - 2] === '.') {
-              display.innerHTML = newDisplayText.substring(0, newDisplayText.length - 2);
+              dispVal.innerHTML = newDisplayText.substring(0, newDisplayText.length - 2);
             }
             return;
           }
       result = operate(calc[0], calc[1], calc[2]);
-
       console.log(`Result is ${result}.`);
       // Store result in calc[0]
       calc.splice(0, 3, result, 0, 0);
-      display.innerHTML = result;
+      dispVal.innerHTML = result;
       resetDisp = true;
       console.log(calc);
       break;
     case '.':
       // Return if there is already a decimal point
-      if (display.innerHTML.split("").find(e => e === '.') === '.') return;
+      if (dispVal.innerHTML.split("").find(e => e === '.') === '.') return;
+      // Return if over length limit
+      if (newDisplayText.length > 11) return;
       if (isNum1) {
         // Display accumulated string of numbers
-        display.innerHTML = newDisplayText;
+        dispVal.innerHTML = newDisplayText;
         calc.splice(0, 1, newDisplayText);
       } else { // Ready for new number input
-        display.innerHTML = newDisplayText;
+        dispVal.innerHTML = newDisplayText;
         calc.splice(1, 1, newDisplayText);
       }
       break;
@@ -187,12 +196,14 @@ function handler(e) {
         resetDisp = false;
         return;
       }
+      // Trim display value if over 11 in length
+      if (newDisplayText.length > 11) return;
       if (isNum1) {
         // Display accumulated string of numbers
-        display.innerHTML = newDisplayText;
+        dispVal.innerHTML = newDisplayText;
         calc.splice(0, 1, newDisplayText);
       } else { // Ready for new number input
-        display.innerHTML = newDisplayText;
+        dispVal.innerHTML = newDisplayText;
         calc.splice(1, 1, newDisplayText);
       }
     console.log(calc);
@@ -203,11 +214,11 @@ function handler(e) {
 
 //      TO-DO
 
-// REFACTOR  ** I'd rather proceed in TOP **
+// REFACTOR  ** Not going to spend my entire life on this lol **
 // DECIMAL POINT BUTTON   ** DONE **
 // LIMIT DECIMAL POINT TO ONE ONLY (DISABLE BUTTON ONCE THERE'S ONE)  ** DONE **
-// TRIM LONG DECIMALS  ** Users would prefer higher precision **
+// TRIM LONG DECIMALS  ** DONE **
 // ZERO DIVISION WARNING  ** DONE **
-// CSS BEAUTIFICATION  
+// CSS BEAUTIFICATION  ** DONE **
 // BACKSPACE   ** DONE **
 // KEYBOARD SUPPORT?   ** I don't have a numpad **
