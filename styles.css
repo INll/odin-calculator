@@ -88,3 +88,18 @@ button {
 .btn:active span{
   transform: translateY(.04em);
 }
+
+.btn.operator.active {
+  display: flex;
+  height: 18.57px;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 auto;
+  background-color: #ececec;
+  border: 1px solid rgb(255, 76, 22);
+  padding: .05em 6px 0px 6px;
+}
+
+.btn.operator.active span{
+  transform: translateY(.04em);
+}

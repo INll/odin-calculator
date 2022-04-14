@@ -68,6 +68,15 @@ function resetDisplay(clicked) {
   resetDisp = false; // Reset not needed when entering the second number
 }
 
+// Remove clicked status from all operator buttons
+function deactivateAllBtns() {
+  const operatorBtns = document.querySelectorAll('.operator');
+  operatorBtns.forEach((btn) => {
+    // Remove the last class unless no additional class exists
+    if (btn.classList.length === 3) return;
+    btn.classList.remove(`${btn.classList[btn.classList.length - 1]}`)
+  })
+}
 
 // addEventListener() to all buttons
 const allBtns = document.querySelectorAll('.btn');
@@ -83,8 +92,9 @@ function handler(e) {
   // Evaluate buttons
   switch (clicked) {
     case '+': case '-': case '*': case '/':
-      // Make button active
-      
+      // Deactivate all buttons then activate current
+      deactivateAllBtns();
+      console.log(this.classList.add('active'));
       // Check if no operator has been selected before
       if (calc[2] === 0) {
         calc.splice(2, 1, clicked);
@@ -130,6 +140,7 @@ function handler(e) {
           calc[1] === 0 && 
           calc[2] === 0) return;
       allClear();
+      deactivateAllBtns();
       console.log(calc);
       return;
     case 'bksp':
@@ -141,6 +152,7 @@ function handler(e) {
       }
     case '=':
       // Check for empty calc array
+      deactivateAllBtns();
       if (calc[0] === 0 || 
           calc[1] === 0 || 
           calc[2] === 0) {
@@ -209,16 +221,3 @@ function handler(e) {
     console.log(calc);
   }
 }
-
-
-
-//      TO-DO
-
-// REFACTOR  ** Not going to spend my entire life on this lol **
-// DECIMAL POINT BUTTON   ** DONE **
-// LIMIT DECIMAL POINT TO ONE ONLY (DISABLE BUTTON ONCE THERE'S ONE)  ** DONE **
-// TRIM LONG DECIMALS  ** DONE **
-// ZERO DIVISION WARNING  ** DONE **
-// CSS BEAUTIFICATION  ** DONE **
-// BACKSPACE   ** DONE **
-// KEYBOARD SUPPORT?   ** I don't have a numpad **
