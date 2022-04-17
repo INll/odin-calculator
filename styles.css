@@ -19,8 +19,9 @@ body {
 }
 
 .numeric-buttons {
-  width: 78.25px;
+  width: 78.35px;
   display: flex;
+  justify-content: center;
   gap: 4px;
   flex-wrap: wrap;
 }
@@ -28,6 +29,7 @@ body {
 .main-input {
   display: flex;
   flex-direction: row;
+  justify-content: center;
 }
 
 .four-operators {
